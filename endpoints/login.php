@@ -27,7 +27,7 @@
         }
 
         function __toString() {
-            
+            return "($id, $uid, $time, $ip)";
         }
     }
 
