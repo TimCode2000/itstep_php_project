@@ -3,10 +3,10 @@
 1. Make service
     1. create registration endpoint
     2. create log in endpoint
-    3. create endpoints for user
-        1. deleteUser endpoint
-        2. searchUser endpoint
-        3. editUser endpoint
+    3. create endpoints for pesron
+        1. deletePerson endpoint
+        2. searchPerson endpoint
+        3. editPerson endpoint
     4. create endpoints for interests of user
         1. searchInterest endpoint
         2. editInterest endpoint 

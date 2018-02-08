@@ -1,14 +1,14 @@
 <?php
     define("USER_IP", $_SERVER['REMOTE_ADDR']);
     $data = $_POST;
-    $result = "";
+    $result = FALSE;
 
     if (isset($data['do_login']))
     {
         $connection     = new SQLite3("user-store.db");
-        $prepared_query = $connection -> prepare("SELECT * FROM user WHERE username = :user");
-        $prepared_query -> bindValue(":user", $username, SQLITE3_TEXT);
+        $prepared_query = $connection -> prepare("SELECT * FROM user WHERE username = :user;");
         $username       = $data['username'];
+        $prepared_query -> bindValue(":user", $username, SQLITE3_TEXT);
         $sqlite_result  = $prepared_query -> execute();
         $user           = $sqlite_result -> fetchArray(SQLITE3_ASSOC);
 
@@ -16,57 +16,46 @@
         {
             if ($data['password'] == $user['password'])
             {
-                $current_session = new Session(get_count($connection) + 1, USER_IP);
-
-                $insert_query    = $connection -> prepare("INSERT INTO sessions(uid, time, ip) VALUES(:user_id, ':time', ':ip'");
-                $insert_query    -> bindValue(":user_id", $current_session -> user_id, SQLITE3_NUM);
-                $insert_query    -> bindValue(":time", $current_session -> time, SQLITE3_TEXT);
-                $insert_query    -> bindValue(":ip", $current_session -> ip, SQLITE3_TEXT);
-                $insert_query    -> execute();
-
-                $current_session -> set_as_session_object();
-                $insert_query    -> close();
-                $prepared_query  -> close();
-                $connection      -> close();
-
-                $result          = "<center><a href='main.php'>Нажмите здесь</a> чтобы пройти на главную страницу</center>";
-            } else
-            {
-                $result          = "<dir class='error_message'>Данные введены неверно</dir>";
+                $timestamp       = time();
+                $sessions_count  = get_sessions_count($connection);
+                $session_id      = hash("ripemd128", ($sessions_count + 1) . $timestamp);
+                $user_id         = $sessions_count + 1;
+                $current_session = new Session($session_id, $user_id, $timestamp, USER_IP);
+                $connection      -> exec("INSERT INTO sessions VALUES('$session_id', $user_id, '$timestamp', '" . USER_IP . "');");
+                $current_session -> set_session_cookie();
+                $result          = TRUE;
             }
-        } else
-        {
-            $prepared_query -> close();
-            $connection     -> close();
-            
-            $result         = "<dir class='error_message'>Данные введены неверно</dir>";
         }
     } else
     {
-        $result = "<dir class='error_message'>Пожалуйста, заполните форму для входа. Для заполнения формы <a href='../login.html'>нажмите сюда</a> </dir>";
+        header("Location: login.html");
     }
+
+    $prepared_query -> close();
+    $connection     -> close();
 
     echo $result;
 
     class Session
     {
-        public $user_id, $time, $ip;
+        public $session_id, $user_id, $time, $ip;
 
-        public function __construct($user_id, $ip)
+        public function __construct($session_id, $user_id, $time,  $ip)
         {
-            $this->user_id = $user_id;
-            $this->ip = $ip;
-            $this->time = time();
+            $this -> session_id = $session_id;
+            $this -> user_id     = $user_id;
+            $this -> ip          = $ip;
+            $this -> time        = $time;
         }
 
-        public function set_as_session_object()
+        public function set_session_cookie()
         {
-            session_start();
-            $_SESSION['current_session'] = $this;
+            setcookie("session_id", $this -> session_id, $this -> time + 60 * 60 * 24 * 31, "/");
         }
     }
 
-    function get_count($connection) {
+    function get_sessions_count(SQLite3 $connection) {
         $sqlite_result = $connection -> query("SELECT COUNT(id) FROM sessions");
-        return (int) $sqlite_result -> fetchArray(SQLITE3_NUM)[0];
+        $result        = $sqlite_result -> fetchArray(SQLITE3_NUM)[0];
+        return (int) $result;
     }
