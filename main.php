@@ -2,7 +2,7 @@
     $result = [];
     $data = $_GET;
 
-    if (isset($_SESSION["current_session_id"]))
+    if (isset($_COOKIE['current_session_id']))
     {
         $connection     = new SQLite3("user-store.db");
         $page = 1;

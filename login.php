@@ -1,7 +1,7 @@
 <?php
     define("USER_IP", $_SERVER['REMOTE_ADDR']);
     $data = $_POST;
-    $result = FALSE;
+    $result = "FALSE";
 
     if (isset($data['do_login']))
     {
@@ -11,6 +11,7 @@
         $prepared_query -> bindValue(":user", $username, SQLITE3_TEXT);
         $sqlite_result  = $prepared_query -> execute();
         $user           = $sqlite_result -> fetchArray(SQLITE3_ASSOC);
+        $prepared_query -> close();
 
         if ($user)
         {
@@ -22,8 +23,8 @@
                 $user_id         = $sessions_count + 1;
                 $current_session = new Session($session_id, $user_id, $timestamp, USER_IP);
                 $connection      -> exec("INSERT INTO sessions VALUES('$session_id', $user_id, '$timestamp', '" . USER_IP . "');");
-                $current_session -> set_session_cookie();
-                $result          = TRUE;
+                $current_session -> save_id();
+                $result          = "TRUE";
             }
         }
     } else
@@ -31,7 +32,6 @@
         header("Location: login.html");
     }
 
-    $prepared_query -> close();
     $connection     -> close();
 
     echo $result;
@@ -43,14 +43,14 @@
         public function __construct($session_id, $user_id, $time,  $ip)
         {
             $this -> session_id = $session_id;
-            $this -> user_id     = $user_id;
-            $this -> ip          = $ip;
-            $this -> time        = $time;
+            $this -> user_id    = $user_id;
+            $this -> ip         = $ip;
+            $this -> time       = $time;
         }
 
-        public function set_session_cookie()
+        public function save_id()
         {
-            setcookie("session_id", $this -> session_id, $this -> time + 60 * 60 * 24 * 31, "/");
+            setcookie("current_session_id", $this -> session_id, time() + 60 * 60 * 24 * 31, "/");
         }
     }
 
