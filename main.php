@@ -18,6 +18,9 @@
         {
             $result[] = [$row['id'], $row['first_name'], $row['last_name'], $row['phone'], $row['active'], $row['age']];
         }
+    } else
+    {
+        $result['error'] = "Пожалуйста войдите в учётную запись";
     }
 
     echo json_encode($result);

@@ -1,1 +1,2 @@
-RewriteEngine ON
+AddDefaultCharset utf-8
+DirectoryIndex main.php

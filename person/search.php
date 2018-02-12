@@ -1,5 +1,5 @@
 <?php
-    $user = [];
+    $result = [];
 
     if (isset($_COOKIE["current_session_id"]))
     {
@@ -13,12 +13,12 @@
             $prepared_query               = $connection -> prepare("SELECT * FROM person WHERE first_name = :first_name AND last_name = :last_name");
             $prepared_query               -> bindValue(":first_name", $first_name, SQLITE3_TEXT);
             $prepared_query               -> bindValue(":last_name", $last_name, SQLITE3_TEXT);
-            $user                         = $prepared_query -> execute() -> fetchArray(SQLITE3_ASSOC);
+            $result                       = $prepared_query -> execute() -> fetchArray(SQLITE3_ASSOC);
         } elseif (isset($data['phone']))
         {
             $prepared_query               = $connection -> prepare("SELECT * FROM person WHERE phone = :phone");
             $prepared_query               -> bindValue(":phone", $data['phone'], SQLITE3_ASSOC);
-            $user                         = $prepared_query -> execute() -> fetchArray(SQLITE3_ASSOC);
+            $result                       = $prepared_query -> execute() -> fetchArray(SQLITE3_ASSOC);
         } elseif (isset($data['interest']))
         {
             $prepared_query               = $connection -> prepare(
@@ -32,12 +32,12 @@
 
             while ($row = $sqlite_result -> fetchArray(SQLITE3_ASSOC))
             {
-                $user[] = $row;
+                $result[] = $row;
             }
         }
     } else
     {
-        header("Location: index.php");
+        $result = ["error" => "Пожалуйста войдите в учётную запись"];
     }
 
-    echo json_encode($user);
+    echo json_encode($result);
