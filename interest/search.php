@@ -8,7 +8,7 @@
         if (isset($data['query']))
         {
             $connection     = new SQLite3("../user-store.db");
-            $prepared_query = $connection -> prepare("SELECT * FROM interest WHERE description LIKE %:description%");
+            $prepared_query = $connection -> prepare("SELECT * FROM interest WHERE description LIKE  '%' || :description || '%'");
             $prepared_query -> bindValue(":description", $data['query'], SQLITE3_TEXT);
             $sqlite_result  = $prepared_query -> execute();
 

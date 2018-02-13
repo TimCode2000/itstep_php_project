@@ -5,19 +5,10 @@
     {
         $data = $_GET;
 
-        if (isset($data['new_description']))
+        if (isset($data['description']) && isset($data['new_description']))
         {
-            if (isset($data['description']))
-            {
-                $id = get_interest_id($data['description']);
-                $result['edit_interest'] = edit_description($id, $data['new_description']);
-            } else if (isset($data['id']))
-            {
-                $result['edit_interest'] = edit_description($data['id'], $data['new_description']);
-            } else
-            {
-                $result['error'] = "Пожалуйста введите данные для изменения интереса";
-            }
+            $id = get_interest_id($data['description']);
+            $result['edit_interest'] = edit_description($id, $data['new_description']);
         } else
         {
             $result['error'] = "Пожалуйста введите данные для измененеия интереса";
@@ -43,12 +34,11 @@
     {
         $connection     = new SQLite3("../user-store.db");
         $prepared_query = $connection -> prepare("UPDATE interest SET description = :description WHERE id = :id");
-
         $prepared_query -> bindValue(":description", $new_description, SQLITE3_TEXT);
         $prepared_query -> bindValue(":id", $id, SQLITE3_TEXT);
+        $prepared_query -> execute();
 
-        $sqlite_result = $prepared_query -> execute();
-        $query_result = $sqlite_result -> fetchArray();
-
-        return ($query_result) ? "Интерес был успешно изменён" : "Интерес не был изменён";
+        $prepared_query -> close();
+        $connection     -> close();
+        return "Интерес был успешно изменён";
     }

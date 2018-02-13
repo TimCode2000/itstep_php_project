@@ -12,20 +12,18 @@
             isset($data['active']))
         {
             $connection     = new SQLite3("../user-store.db");
-            $prepared_query = $connection -> prepare("INSERT INTO person VALUES(:first_name, :last_name, :phone, :active, :age)");
+            $prepared_query = $connection -> prepare("INSERT INTO person(first_name, last_name, phone, active, age) VALUES(:first_name, :last_name, :phone, :active, :age)");
 
             $prepared_query -> bindValue(":first_name", $data['first_name'], SQLITE3_TEXT);
             $prepared_query -> bindValue(":last_name", $data['last_name'], SQLITE3_TEXT);
-            $prepared_query -> bindValue(":phone", $data['phone'], SQLITE3_NUM);
-            $prepared_query -> bindValue(":active", $data['active'], SQLITE3_NUM);
-            $prepared_query -> bindValue(":age", $data['age'], SQLITE3_NUM);
+            $prepared_query -> bindValue(":phone", $data['phone'], SQLITE3_INTEGER);
+            $prepared_query -> bindValue(":active", $data['active'], SQLITE3_INTEGER);
+            $prepared_query -> bindValue(":age", $data['age'], SQLITE3_INTEGER);
 
-            $result['adding_person'] = ($prepared_query -> execute())
-                ? "Новый пользователь был успешно добавлен"
-                : "Новый пользователь не был добавлен";
+            $result['adding_person'] = "Новый пользователь был успешно добавлен";
         } else
         {
-            $result['error'] = "Пожалуйста введите данные необходимые для добавления пользователя";
+            $result['error'] = "Не были указаны данные пользователя";
         }
     } else
     {

@@ -8,12 +8,11 @@
         if (isset($data['description']))
         {
             $connection     = new SQLite3("../user-store.db");
-            $prepared_query = $connection->prepare("INSERT INTO interest VALUE (:description)");
-            $prepared_query ->bindValue(":description", $data['description'], SQLITE3_TEXT);
+            $prepared_query = $connection->prepare("INSERT INTO interest(description) VALUES (:description)");
+            $prepared_query -> bindValue(":description", $data['description'], SQLITE3_TEXT);
+            $prepared_query -> execute();
 
-            $result['adding_interest'] = ($prepared_query->execute())
-                ? "Новый интерес был успешно добавлен"
-                : "Новый интерес не был добавлен";
+            $result['adding_interest'] = "Новый интерес был успешно добавлен";
         } else
         {
             $result['error'] = "Пожалуйста укажите нужные поля для новой записи";
