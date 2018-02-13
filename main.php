@@ -12,7 +12,7 @@
             $page = $data['page'];
         }
 
-        $sqlite_result  = $connection -> query("SELECT * FROM person LIMIT 20 OFFSET " . $page * 20);
+        $sqlite_result  = $connection -> query("SELECT * FROM person LIMIT 20 OFFSET " . ($page - 1) * 20);
 
         while ($row = $sqlite_result -> fetchArray(SQLITE3_ASSOC))
         {
@@ -23,4 +23,4 @@
         $result['error'] = "Пожалуйста войдите в учётную запись";
     }
 
-    echo json_encode($result);
+    echo json_encode($result, JSON_UNESCAPED_UNICODE);

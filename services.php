@@ -1,19 +1,19 @@
 <?php
     switch ($_GET['q'])
     {
-        case "/login":
+        case "/login.php":
             require "login.php";
             break;
-        case "/logout":
+        case "/logout.php":
             require "logout.php";
             break;
-        case "/person/search":
+        case "/person/search.php":
             require "person/search.php";
             break;
-        case "/person/delete":
+        case "/person/delete.php":
             require "person/delete.php";
             break;
-        case "/main":
+        case "/main.php":
             require "main.php";
             break;
         default:
