@@ -1,22 +1,29 @@
 <?php
-    switch ($_GET['q'])
+    $url = $_GET['url'];
+    $separated_url = explode('/', $url);
+
+    if (count($separated_url) == 2)
     {
-        case "/login.php":
-            require "login.php";
-            break;
-        case "/logout.php":
-            require "logout.php";
-            break;
-        case "/person/search.php":
-            require "person/search.php";
-            break;
-        case "/person/delete.php":
-            require "person/delete.php";
-            break;
-        case "/main.php":
-            require "main.php";
-            break;
-        default:
-            echo "No endpoint found";
-            break;
+        $model_name   = $separated_url[0];
+        $model_action = (strpos($separated_url[1], ".php")) ? substr($separated_url[1], strpos($separated_url[1], ".php")) : $separated_url[1];
+
+        require "models/$model_name.php";
+
+        $model = new $model_name("user-store.db");
+        $model -> $model_action();
+
+        echo $model;
+    } else if (count($separated_url) < 2)
+    {
+        $page = "main.php";
+
+        if (count($separated_url))
+        {
+            $page = $separated_url[0];
+        }
+
+        require "$page";
+    } else
+    {
+        echo "Нет такой страницы";
     }

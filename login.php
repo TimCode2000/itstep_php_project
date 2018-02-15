@@ -1,17 +1,13 @@
 <?php
-    define("USER_IP", $_SERVER['REMOTE_ADDR']);
-    $data = $_POST;
-    $result = "FALSE";
+    $data = $_GET;
+    $result = [];
 
-    if (isset($data['do_login']))
+    if (isset($data['username']) && isset($data['password']))
     {
         $connection     = new SQLite3("user-store.db");
-        $prepared_query = $connection -> prepare("SELECT * FROM user WHERE username = :user;");
-        $username       = $data['username'];
-        $prepared_query -> bindValue(":user", $username, SQLITE3_TEXT);
-        $sqlite_result  = $prepared_query -> execute();
-        $user           = $sqlite_result -> fetchArray(SQLITE3_ASSOC);
-        $prepared_query -> close();
+        $prepared_query = $connection -> prepare("SELECT * FROM user WHERE username = :user");
+        $prepared_query -> bindValue(":user", $data['username'], SQLITE3_TEXT);
+        $user           = $prepared_query -> execute() -> fetchArray(SQLITE3_ASSOC);
 
         if ($user)
         {
@@ -21,20 +17,29 @@
                 $sessions_count  = get_sessions_count($connection);
                 $session_id      = hash("ripemd128", ($sessions_count + 1) . $timestamp);
                 $user_id         = $sessions_count + 1;
-                $current_session = new Session($session_id, $user_id, $timestamp, USER_IP);
-                $connection      -> exec("INSERT INTO sessions VALUES('$session_id', $user_id, '$timestamp', '" . USER_IP . "');");
+                $current_session = new Session($session_id, $user_id, $timestamp, $_SERVER['REMOTE_ADDR']);
+
+                $connection      -> exec("INSERT INTO sessions VALUES('$session_id', $user_id, '$timestamp', '" . $_SERVER['REMOTE_ADDR'] . "');");
                 $current_session -> save_id();
-                $result          = "TRUE";
+
+                $result['login'] = "Вы вошли в учётную запись";
+            } else
+            {
+                $result['error'] = "Данные для входа в учётную запись введены неверно";
             }
+        } else
+        {
+            $result['error'] = "Данные для входа в учётную запись введены неверно";
         }
+
+        $prepared_query -> close();
+        $connection     -> close();
     } else
     {
-        header("Location: login.html");
+        $result['error'] = "Введите данные для входа в учётную запись";
     }
 
-    $connection     -> close();
-
-    echo $result;
+    echo json_encode($result, JSON_UNESCAPED_UNICODE);
 
     class Session
     {
@@ -57,5 +62,5 @@
     function get_sessions_count(SQLite3 $connection) {
         $sqlite_result = $connection -> query("SELECT COUNT(id) FROM sessions");
         $result        = $sqlite_result -> fetchArray(SQLITE3_NUM)[0];
-        return (int) $result;
+        return $result;
     }

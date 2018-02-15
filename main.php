@@ -1,22 +1,24 @@
 <?php
     $result = [];
-    $data = $_GET;
 
     if (isset($_COOKIE['current_session_id']))
     {
+        $data = $_GET;
         $connection     = new SQLite3("user-store.db");
-        $page = 1;
+        $offset_multiplier = 0;
 
         if (isset($data['page']))
         {
-            $page = $data['page'];
+            $offset_multiplier = $data['page'] - 1;
         }
 
-        $sqlite_result  = $connection -> query("SELECT * FROM person LIMIT 20 OFFSET " . ($page - 1) * 20);
+        $prepared_query = $connection -> prepare("SELECT * FROM person LIMIT 20 OFFSET :offset_multiplier * 20");
+        $prepared_query -> bindValue(":offset_multiplier", $offset_multiplier, SQLITE3_INTEGER);
+        $sqlite_result  = $prepared_query -> execute();
 
         while ($row = $sqlite_result -> fetchArray(SQLITE3_ASSOC))
         {
-            $result[] = [$row['id'], $row['first_name'], $row['last_name'], $row['phone'], $row['active'], $row['age']];
+            $result[] = $row;
         }
     } else
     {
