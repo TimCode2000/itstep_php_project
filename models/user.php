@@ -1,5 +1,5 @@
 <?php
-    class Person
+    class user
     {
         public $data;
         public $connection;
@@ -36,6 +36,8 @@
                     $prepared_query -> bindValue(":phone", $this -> data['phone'], SQLITE3_INTEGER);
                     $prepared_query -> bindValue(":active", $this -> data['active'], SQLITE3_INTEGER);
                     $prepared_query -> bindValue(":age", $this -> data['age'], SQLITE3_INTEGER);
+
+                    $prepared_query -> execute();
 
                     $this -> result['adding_person'] = "Новый пользователь был успешно добавлен";
                 } else

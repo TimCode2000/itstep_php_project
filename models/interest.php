@@ -1,5 +1,5 @@
 <?php
-    class Interest
+    class interest
     {
         private $data;
         private $connection;
