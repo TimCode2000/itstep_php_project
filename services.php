@@ -1,6 +1,7 @@
 <?php
     $url = $_GET['q'];
     $separated_url = explode('/', $url);
+    $result = [];
 
     if (count($separated_url) > 2)
     {
@@ -30,3 +31,5 @@
             }
         }
     }
+
+    echo $result;
