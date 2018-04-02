@@ -15,11 +15,14 @@
         $prepared_query = $connection -> prepare("SELECT * FROM person LIMIT 20 OFFSET :offset_multiplier * 20");
         $prepared_query -> bindValue(":offset_multiplier", $offset_multiplier, SQLITE3_INTEGER);
         $sqlite_result  = $prepared_query -> execute();
+        $persons = [];
 
         while ($row = $sqlite_result -> fetchArray(SQLITE3_ASSOC))
         {
-            $result[] = $row;
+            $persons[] = $row;
         }
+
+        $result['persons'] = $persons;
     } else
     {
         $result['error'] = "Пожалуйста войдите в учётную запись";

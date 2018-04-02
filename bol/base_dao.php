@@ -16,7 +16,7 @@ abstract class BaseDao
 
     public function __construct()
     {
-        $this->sqlite_connection = new SQLite3("../user-store.db");
+        $this->sqlite_connection = new SQLite3("user-store.db");
     }
 
     /**
@@ -65,7 +65,7 @@ abstract class BaseDao
         
         foreach ($row as $column => $value)
         {
-            $entity[$column] = $value;
+            $entity->$column = $value;
         }
 
         return $entity;
@@ -84,18 +84,17 @@ abstract class BaseDao
 
         foreach ($entity as $column => $value)
         {
-            if (!$column === "id" || !$ai)
+            if ($column !== "id" || !$ai)
             {
                 $columnList .= $column . ", ";
-                $valueList .= $value . ", ";
+                $valueList .= "'" . $value . "', ";
             }
         }
 
         $columnList = substr($columnList, 0, strlen($columnList) - 2);
         $valueList = substr($valueList, 0, strlen($valueList) - 2);
-        $query = "INSERT INTO " . strtolower(get_class($entity)) . "(" . $columnList . ") VALUES (" . $valueList . ");";
 
-        echo $query;
+        $query = "INSERT INTO " . strtolower(get_class($entity)) . "(" . $columnList . ") VALUES (" . $valueList . ");";
 
         $newRowInserted = $this->sqlite_connection->exec($query);
 
@@ -135,6 +134,6 @@ abstract class BaseDao
             $condition = " WHERE " . $query;
         }
 
-        return $this->query("SELECT COUNT(*) FROM " . $this->getTableName() . $condition)->fetchArray(SQLITE3_INTEGER)[0];
+        return $this->sqlite_connection->query("SELECT COUNT(*) FROM " . $this->getTableName() . $condition)->fetchArray()[0];
     }
 }

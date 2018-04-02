@@ -11,15 +11,15 @@
     {
         list($controller_class, $action) = $separated_url;
 
-        if (!file_exists(__DIR__ . "/controllers/" . $controller))
+        if (!file_exists("controllers/" . $controller_class . ".php"))
         {
             $result['error'] = "Нет такой страницы";
         }
         else 
         {
-            require($controller_class . "_controller");
+            require("controllers/" . $controller_class . ".php");
             $controller_class = ucfirst($controller_class) . "Controller";
-            $controller = new $controller_class ();
+            $controller = new $controller_class();
 
             if (!method_exists($controller, $action))
             {
@@ -27,9 +27,9 @@
             }
             else
             {
-                $result['success'] = $controller->$action();
+                $result = $controller->$action();
             }
         }
     }
 
-    echo $result;
+    echo json_encode($result, JSON_UNESCAPED_UNICODE);

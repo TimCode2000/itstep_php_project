@@ -1,5 +1,8 @@
 <?php
 
+require "base_dao.php";
+require "person.php";
+
 class PersonDao extends BaseDao
 {
     /**
@@ -72,7 +75,7 @@ class PersonDao extends BaseDao
         $person = new Person();
 
         $person->firstName = $firstName;
-        $person->lastName = $lastName;
+        $person->lastName = $lastName;  
         $person->phone = $phone;
         $person->active = $active;
         $person->age = $age;
@@ -102,7 +105,7 @@ class PersonDao extends BaseDao
     public function removePersonByFullName($fullName)
     {
         list($firstName, $lastName) = explode(" ", $fullName);
-        $query = "firstName=$firstName AND lastName=$lastName";
+        $query = "firstName='$firstName' AND lastName='$lastName'";
 
         $this->queryForRemove($query);
     }
@@ -115,7 +118,7 @@ class PersonDao extends BaseDao
 
     public function removePersonByPhone($phone)
     {
-        $query = "phone=$phone";
+        $query = "phone='$phone'";
 
         $this->queryForRemove($query);
     }

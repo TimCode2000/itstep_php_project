@@ -1,48 +1,73 @@
 <?php
 
+require __DIR__ . "/../bol/session_dao.php";
+require __DIR__ . "/../bol/user_dao.php";
+
 class UserController
 {
     public function login()
     {
-        $data = $_GET;
-        $result = [];
+        if (!isset($_COOKIE['current_session_id'])) {
+            $data = $_GET;
+            $result = [];
 
-        if (isset($data['username']) && isset($data['password']))
-        {
-            $user = UserDao::getInstance()->getUserByUsername($data['username']);
-
-            if ($user)
+            if (isset($data['username']) && isset($data['password']))
             {
-                if ($data['password'] == $user['password'])
+                $user = UserDao::getInstance()->getUserByUsername($data['username']);
+
+                if ($user)
                 {
-                    $timestamp       = time();
-                    $sessions_count  = get_sessions_count($connection);
-                    $session_id      = hash("ripemd128", ($sessions_count + 1) . $timestamp);
-                    $user_id         = $sessions_count + 1;
-                    $current_session = new Session($session_id, $user_id, $timestamp, $_SERVER['REMOTE_ADDR']);
+                    if ($data['password'] == $user->password)
+                    {
+                        $sessionsDao = SessionDao::getInstance();
 
-                    $connection      -> exec("INSERT INTO sessions VALUES('$session_id', $user_id, '$timestamp', '" . $_SERVER['REMOTE_ADDR'] . "');");
-                    $current_session -> save_id();
+                        $timestamp = time();
+                        $sessions_count = $sessionsDao->getSessionsCount();
+                        $session_id = hash("ripemd128", ($sessions_count + 1) . $timestamp);
+                        $user_id = $sessions_count + 1;
+                        $user_ip = $_SERVER['REMOTE_ADDR'];
+                        $sessionsDao->addSession($session_id, $user_id, $user_ip);
+                        setcookie("current_session_id", $session_id, time() + 60 * 60 * 24 * 31, "/");
 
-                    $result['login'] = "Вы вошли в учётную запись";
+                        $result['login'] = "Вы вошли в учётную запись";
+                    } else
+                    {
+                        $result['error'] = "Данные для входа в учётную запись введены неверно";
+                    }
                 } else
                 {
                     $result['error'] = "Данные для входа в учётную запись введены неверно";
                 }
             } else
             {
-                $result['error'] = "Данные для входа в учётную запись введены неверно";
+                $result['error'] = "Введите данные для входа в учётную запись";
             }
-        } else
+        } else 
         {
-            $result['error'] = "Введите данные для входа в учётную запись";
+            $result['error'] = "Вы уже залогинены";
         }
 
-        echo json_encode($result, JSON_UNESCAPED_UNICODE);
+        return $result;
     }
 
     public function logout()
     {
+        $result = [];
 
+        if (isset($_COOKIE['current_session_id']))
+        {
+            $session_id = $_COOKIE['current_session_id'];
+            $sessionsDao = SessionDao::getInstance();
+            $sessionsDao -> removeSessionById($session_id);
+
+            setcookie('current_session_id', $session_id, time() - 60 * 60 * 24 * 31, "/");
+            $result['logout'] = "Вы вышли из учётной записи";
+        } 
+        else
+        {
+            $result['error'] = "Вы не вошли в учётную запись";
+        }
+
+        return $result;
     }
 }

@@ -1,5 +1,8 @@
 <?php
 
+require "base_dao.php";
+require "session.php";
+
 class SessionDao extends BaseDao
 {
     /**
@@ -60,6 +63,7 @@ class SessionDao extends BaseDao
     /**
      * Add session
      * 
+     * @param string
      * @param integer
      * @param string
      */
@@ -84,7 +88,7 @@ class SessionDao extends BaseDao
 
     public function removeSessionById($id)
     {
-        $query = "id=$id";
+        $query = "id='$id'";
 
         $this->queryForRemove($query);
     }

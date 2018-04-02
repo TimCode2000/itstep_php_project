@@ -1,5 +1,7 @@
 <?php
 
+require "user.php";
+
 class UserDao extends BaseDao
 {
     /**
@@ -109,7 +111,7 @@ class UserDao extends BaseDao
 
     public function getUserByUsername($username)
     {
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE username=$username";
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE username='$username'";
 
         return $this->queryForObject($query, $this->getDtoClassName());
     }
@@ -122,7 +124,7 @@ class UserDao extends BaseDao
 
     public function getUserById($id)
     {
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE username=$username";
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE username='$username'";
 
         return $this->queryForObject($query, $this->getDtoClassName);
     }
