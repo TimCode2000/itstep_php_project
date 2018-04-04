@@ -1,7 +1,6 @@
 <?php
 
-require "base_dao.php";
-require "session.php";
+require_once "base_dao.php";
 
 class SessionDao extends BaseDao
 {

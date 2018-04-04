@@ -1,5 +1,7 @@
 <?php
 
+require_once "base_dao.php";
+
 class PersonInterestDao extends BaseDao
 {
     /**

@@ -1,7 +1,8 @@
 <?php
 
-require "base_dao.php";
-require "person.php";
+require_once "base_dao.php";
+require_once "interest_dao.php";
+require_once "person_interest_dao.php";
 
 class PersonDao extends BaseDao
 {
@@ -124,6 +125,43 @@ class PersonDao extends BaseDao
     }
 
     /**
+     * Updates person data
+     * 
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param string
+     * @param integer
+     */
+
+    public function updatePerson($newFirstName, $newLastName, $newPhone, $newActive, $newAge, $personId)
+    {
+        $newPerson = new Person();
+        $newPerson->firstName = $newFirstName;
+        $newPerson->lastName = $newLastName;
+        $newPerson->phone = $newPhone;
+        $newPerson->active = $newActive;
+        $newPerson->age = $newAge;
+
+        $setStatement = "";
+
+        foreach ($newPerson as $column => $value)
+        {
+            if ($column !== "id") 
+            {
+                $setStatement .= $column . "=" . $value . ",";
+            }
+        }
+
+        $setStatement = substr($setStatement, 0, strlen($setStatement) - 1);
+
+        $query = "UPDATE " . $this->getTableName() . " SET " . $setStatement . " WHERE id=" . $personId;
+
+        $this->executeUpdate($query);
+    }
+
+    /**
      * Get person by id
      * 
      * @var integer
@@ -133,7 +171,7 @@ class PersonDao extends BaseDao
     {
         $query = "SELECT * FROM " . $this->getTableName() . " WHERE id=$id";
 
-        return $this->queryForObject($query, $this->getDtoClassName);
+        return $this->queryForObject($query, $this->getDtoClassName());
     }
 
     /**
@@ -147,7 +185,7 @@ class PersonDao extends BaseDao
     public function getPersonByFullName($fullName)
     {
         list($firstName, $lastName) = explode(" ", $fullName);
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE firstName=$firstName AND lastName=$lastName";
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE firstName='$firstName' AND lastName='$lastName'";
 
         return $this->queryForObject($query, $this->getDtoClassName());
     }
@@ -162,7 +200,7 @@ class PersonDao extends BaseDao
 
     public function getPersonByPhone($phone)
     {
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE phone=$phone";
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE phone='$phone'";
 
         return $this->queryForObject($query, $this->getDtoClassName());
     }
@@ -178,12 +216,14 @@ class PersonDao extends BaseDao
     public function getPersonsByInterestDescription($description)
     {
         $interest = InterestDao::getInstance()->getInterestByDescription($description);
-        $personIds = PersonInterestDao::getInstance()->getPersonsWithInterest($interest->id);
+        $personInterests = PersonInterestDao::getInstance()->getPersonsWithInterest($interest->id);
         $result = [];
 
-        foreach ($personIds as $personId)
+        foreach ($personInterests as $personInterest)
         {
-            $result[] = PersonDao::getInstance()->getPersonByid($id);
+            $result[] = $this->getPersonByid($personInterest->personId);
         }
+
+        return $result;
     }
 }

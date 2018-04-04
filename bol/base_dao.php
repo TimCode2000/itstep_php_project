@@ -1,5 +1,11 @@
 <?php
 
+require_once "interest.php";
+require_once "person_interest.php";
+require_once "person.php";
+require_once "session.php";
+require_once "user.php";
+
 abstract class BaseDao 
 {
     /**
@@ -33,13 +39,13 @@ abstract class BaseDao
         $sqliteResult = $this->sqlite_connection->query($query);
         $result = [];
 
-        while ( $row = $sqliteResult->fetch(SQLITE3_ASSOC) )
+        while ( $row = $sqliteResult->fetchArray(SQLITE3_ASSOC) )
         {
             $entity = new $dtoClassName();
 
             foreach ($row as $column => $value)
             {
-                $entity[$column] = $value;
+                $entity->$column = $value;
             }
 
             $result[] = $entity;
@@ -117,6 +123,17 @@ abstract class BaseDao
     public function queryForRemove($query)
     {
         $this->sqlite_connection->exec("DELETE FROM " . $this->getTableName() . " WHERE " . $query);
+    }
+
+    /**
+     * Updates table data
+     * 
+     * @param string
+     */
+
+    public function executeUpdate($query)
+    {
+        $this->sqlite_connection->exce($query);
     }
 
     /**

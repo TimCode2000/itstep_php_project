@@ -1,6 +1,6 @@
 <?php
 
-require "user.php";
+require_once "base_dao.php";
 
 class UserDao extends BaseDao
 {

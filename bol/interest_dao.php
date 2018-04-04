@@ -1,5 +1,7 @@
 <?php
 
+require_once "base_dao.php";
+
 class InterestDao extends BaseDao
 {
     /**
@@ -79,7 +81,7 @@ class InterestDao extends BaseDao
 
     public function removeInterestByDescription($description)
     {
-        $query = "description=$description";
+        $query = "description='$description'";
 
         $this->queryForRemove($query);
     }
@@ -118,7 +120,7 @@ class InterestDao extends BaseDao
 
     public function getInterestByDescription($description)
     {
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE description=$description";
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE description LIKE '%$description%'";
 
         return $this->queryForObject($query, $this->getDtoClassName());
     }
