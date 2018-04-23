@@ -22,10 +22,10 @@
             $persons[] = $row;
         }
 
-        $result['persons'] = $persons;
+        $result = $persons;
     } else
     {
-        $result['error'] = "Пожалуйста войдите в учётную запись";
+        $result = "Log in";
     }
 
     echo json_encode($result, JSON_UNESCAPED_UNICODE);

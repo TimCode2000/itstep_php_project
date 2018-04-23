@@ -150,7 +150,7 @@ class PersonDao extends BaseDao
         {
             if ($column !== "id") 
             {
-                $setStatement .= $column . "=" . $value . ",";
+                $setStatement .= $column . "='" . $value . "',";
             }
         }
 

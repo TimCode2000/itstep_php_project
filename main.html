@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Main Page</title>
+  <link rel="stylesheet" href="vendor/purecss/pure.css">
+  <link rel="stylesheet" href="assets/css/listing.css">
+  <script type="text/javascript" src="vendor/vuejs/vue.js"></script>
+  <script src="design/js/common.js"></script>
+  <script src="design/js/jquery.js"></script>
+  <script src='design/js/main-page.js'></script>
+  
+  <style>
+    body {
+      margin: 0px;
+      padding: 0px;
+      background: url("design/img/background.jpg");
+    }
+
+    table {
+      background-color: #fff;
+    }
+
+    td > a:hover {
+      color: #2E7094;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    $(function () {
+      loadMainData();
+    })
+  </script>
+
+  <div class="page-wrap">
+    <form class="pure-form">
+       <fieldset>
+        <input type="text" id="searchBar" name="searchBar" placeholder="Search for persons">
+        <select id="approach">
+          <option value="fullName">Name</option>
+          <option value="phone">Phone</option>
+          <option value="interest">Interests</option>
+        </select>
+        <button type="button" onclick="searchPerson()">Search</button>
+      </fieldset>
+       <div id="UserList">
+        <table class="pure-table">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Age</th>
+              <th>Operations</th>
+            </tr>
+          </thead>
+          <tbody id="persons">
+            
+          </tbody>
+        </table>
+        <div class="pagination">
+          <a href="#" id="lastPageRef" onclick="previousPage()" disabled>&laquo;</a>
+          <a href="#" id="pageNumber">1</a>
+          <a href="#" id="nextPageRef" onclick="nextPage()">&raquo;</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

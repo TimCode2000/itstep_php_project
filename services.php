@@ -15,7 +15,7 @@
         {
             $result['error'] = "Нет такой страницы";
         }
-        else 
+        else
         {
             require("controllers/" . $controller_class . ".php");
             $controller_class = ucfirst($controller_class) . "Controller";

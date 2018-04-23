@@ -8,8 +8,8 @@ class UserController
     public function login()
     {
         if (!isset($_COOKIE['current_session_id'])) {
-            $data = $_GET;
-            $result = [];
+            $data = $_POST;
+            $result = "";
 
             if (isset($data['username']) && isset($data['password']))
             {
@@ -29,25 +29,25 @@ class UserController
                         $sessionsDao->addSession($session_id, $user_id, $user_ip);
                         setcookie("current_session_id", $session_id, time() + 60 * 60 * 24 * 31, "/");
 
-                        $result['login'] = "Вы вошли в учётную запись";
+                        $result = "Success";
                     } else
                     {
-                        $result['error'] = "Данные для входа в учётную запись введены неверно";
+                        $result = "Error";
                     }
                 } else
                 {
-                    $result['error'] = "Данные для входа в учётную запись введены неверно";
+                    $result = "Error";
                 }
             } else
             {
-                $result['error'] = "Введите данные для входа в учётную запись";
+                $result = "Error";
             }
         } else 
         {
-            $result['error'] = "Вы уже залогинены";
+            $result = "Allready";
         }
 
-        return $result;
+        return json_encode($result, JSON_UNESCAPED_UNICODE);
     }
 
     public function logout()
@@ -65,7 +65,7 @@ class UserController
         } 
         else
         {
-            $result['error'] = "Вы не вошли в учётную запись";
+            $result = "Вы не вошли в учётную запись";
         }
 
         return $result;

@@ -133,7 +133,7 @@ abstract class BaseDao
 
     public function executeUpdate($query)
     {
-        $this->sqlite_connection->exce($query);
+        $this->sqlite_connection->exec($query);
     }
 
     /**

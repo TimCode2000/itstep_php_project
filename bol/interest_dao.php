@@ -100,6 +100,32 @@ class InterestDao extends BaseDao
     }
 
     /**
+     * Update interest by id
+     * 
+     * @param string
+     * @param integer
+     */
+
+    public function updateInterestById($newDescription, $id)
+    {
+        $query = "UPDATE " . $this->getTableName() . " SET description='" . $newDescription . "' WHERE id=" . $id;
+        $this->executeUpdate($query);
+    }
+
+    /**
+     * Update interest by description
+     * 
+     * @param string
+     * @param string
+     */
+
+    public function updateInterestByDescription($newDescription, $description)
+    {
+        $query = "UPDATE " . $this->getTableName() . " SET description='" . $newDescription . "' WHERE description='" . $description . "'";
+        $this->executeUpdate($query);
+    }
+
+    /**
      * Get interest by id
      * 
      * @param integer
@@ -122,6 +148,6 @@ class InterestDao extends BaseDao
     {
         $query = "SELECT * FROM " . $this->getTableName() . " WHERE description LIKE '%$description%'";
 
-        return $this->queryForObject($query, $this->getDtoClassName());
+        return $this->queryForObjectList($query, $this->getDtoClassName());
     }
 }

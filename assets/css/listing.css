@@ -1,0 +1,59 @@
+
+a {
+  color: black;
+  text-decoration: none;
+  font-variant: small-caps
+}
+
+
+th {
+  text-align: center;
+  background-color: #3399cc;
+  color: aliceblue;
+}
+
+table {
+  width: 95%;
+  margin: auto;
+  text-align: center;
+}
+
+body {
+  margin-top: 40px;
+  text-align: center;
+ }
+
+.button {
+  background-color: #3399cc;
+}
+
+.button:active {
+    background-color: #1a8cff;
+    box-shadow: 0 2px #666;
+    transform: translateY(4px);
+}
+
+
+.page-wrap {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.pagination {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}

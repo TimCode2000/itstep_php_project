@@ -1,43 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
-    <link rel="stylesheet" href="design/css/bootstrap.min.css">
-    <link rel="stylesheet" href="design/css/login.css">
-    <script src="design/js/jquery-3.3.1.min.js"></script>
-
-    <script>
-    	$(function () {
-    		$body = $('body');
-    		$body.css({
-    			"height": window.innerHeight
-    		});
-    	});
-    </script>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="vendor/purecss/pure.css">
+  <link rel="stylesheet" href="assets/css/LoginPage.css" type="text/css">
+  <link rel="stylesheet" href="design/style.css">
+  <script type="text/javascript" src="vendor/vuejs/vue.js"></script>
+  <script src='design/js/jquery.js'></script>
 </head>
 <body>
-	<form id="login_form" action="user/login" method="POST">
-		<table>
-			<tr>
-				<td colspan="2">Login form</td>
-			</tr>
-			<tr>
-				<td>Username: </td>
-				<td><input type="text" placeholder="Enter the username" id="username"></td>
-			</tr>
-			<tr>
-				<td>Password: </td>
-				<td><input type="password" placeholder="Enter the password" id="password"></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><button type="submit">Submit</button></td>
-			</tr>
-		</table>
-	</form>
+  <div class="form-container" style='color: black;'>
+    <form class="form">
+      <input class='input' type="text" id='uesrname' placeholder="Username" />
+      <input class='input' type="password" id='password' placeholder="Password" />
+      <input type="submit" value="Login" />
+    </form>
+  </div>
+  <script type="text/javascript" src="assets/js/LoginPage.js"></script>
+
+  <script>
+    $(function () {
+      $('input[type="submit"]').on('click', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+          url: window.location.href + "/user/login",
+          type: "POST",
+          data: "username=" + $('#username').val() + "&password=" + $('#password'),
+          dataType: "json",
+          success: function (data) {
+              if (data === "Error") {
+                  $('form').append("<div id='error'></div>");
+              } else {
+                  window.location.href += "/main.html";
+              }
+          }
+        });
+      })
+    })
+  </script>
 </body>
 </html>

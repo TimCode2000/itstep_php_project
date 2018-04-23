@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UserView</title>
+  <link rel="stylesheet" href="vendor/purecss/pure.css">
+  <link rel="stylesheet" href="assets/css/user-view.css">
+  <script type="text/javascript" src="vendor/vuejs/vue.js"></script>
+  <script type="text/javascript" src="data.js"></script>
+  <script type="text/javascript" src="assets/js/main.js"></script> 
+</head>
+<body>
+  <div id="popup">
+    <div class="popup" onclick="ViewUser()" v-on:click="createPerson(0)">User
+      <div class="holder" id="myPopup">
+        <div class="head">
+          <strong>{{firstName}} {{lastName}}, {{age}}</strong>
+        </div>
+        <p>Phone: {{phone}}</p>
+        <p>Active: {{active}}</p>
+        <div><strong>Interests:</strong></div>
+        <div class="body" v-for="item in fullInterests">{{item}}</div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="assets/js/popup.js"></script>
+  <script>
+    addData(Persons, Interests);
+  </script>
+</body>
+</html>

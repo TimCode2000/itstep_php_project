@@ -1,0 +1,89 @@
+h1{
+  color: #fff;
+  text-align: center;
+  font-family: Arial;
+  font-weight: normal;
+  margin: 2em auto 0px;
+}
+
+.form-container{
+  position: relative;
+  top: 50%;
+  width: 400px;
+  height: 400px;
+  background: #f0f0f0;
+  margin: 200px auto;
+  padding: 0px;
+}
+
+.form {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#error {
+  width: 308px;
+  color: black;
+  font-size: 24px;
+  letter-spacing: 1px;
+  border: 2px solid red;
+  border-radius: 5px;
+  padding: 5px 10px;
+  text-align: center;
+  margin: 15px auto;
+}
+
+.input {
+  display: block;
+  width: 309px;
+  height: 35px;
+  margin: 15px auto;
+  background: #fff;
+  border: 0px;
+  padding: 5px;
+  font-size: 16px;
+   border: 2px solid #fff;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+.input:focus{
+  border: 2px solid #46ABE1
+}
+
+input[type="submit"]{
+  display: block;
+  background: #3399cc;
+  width: 314px;
+  padding: 12px;
+  cursor: pointer;
+  color: #fff;
+  border: 0px;
+  margin: auto;
+  font-size: 17px;
+  transition: all 0.3s ease;
+}
+
+input[type="submit"]:hover{
+  background: #2E7094
+}
+
+::-webkit-input-placeholder {
+   color: gray;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: gray;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: gray;  
+}
+
+:-ms-input-placeholder {  
+   color: gray;  
+}

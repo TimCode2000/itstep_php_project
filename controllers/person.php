@@ -11,10 +11,10 @@ class PersonController {
         {
             PersonDao::getInstance()->addPerson($data['firstName'], $data['lastName'], $data['phone'], $data['active'], $data['age']);
 
-            $result['success'] = "Пользователь добавлен успешно";
+            $result = "Пользователь добавлен успешно";
         } else
         {
-            $result['error'] = "Введите данные для создания пользователя";
+            $result = "Введите данные для создания пользователя";
         }
 
         return $result;
@@ -27,16 +27,16 @@ class PersonController {
         if (isset($data['id']))
         {
             PersonDao::getInstance()->removePersonById($data['id']);
-            $result['success'] = "Пользователь удалён успешно";
+            $result = "Пользователь удалён успешно";
         }
         else if (isset($data['firstName']) && isset($data['lastName']))
         {
             PersonDao::getInstance()->removePersonByFullName($data['firstName'] + " " + $data['lastName']);
-            $result['success'] = "Пользователь удалён успешно";
+            $result = "Пользователь удалён успешно";
         }
         else
         {
-            $result['error'] = "Введите данные для удаления пользователя";
+            $result = "Введите данные для удаления пользователя";
         }
 
         return $result;
@@ -51,13 +51,14 @@ class PersonController {
             $result = PersonDao::getInstance()->getPersonsByInterestDescription($data['interest']);
         } else if (isset($data['fullName']))
         {
+            echo "<script>console.log('here')</script>";
             $result = PersonDao::getInstance()->getPersonByFullName($data['fullName']);
         } else if (isset($data['phone']))
         {
             $result = PersonDao::getInstance()->getPersonByPhone($data['phone']);
         } else
         {
-            $result['error'] = "Введите данные для поиска пользователя";
+            $result = "Login";
         }
 
         return $result;
@@ -69,7 +70,7 @@ class PersonController {
         $result = [];
 
         PersonDao::getInstance()->updatePerson($data['firstName'], $data['lastName'], $data['phone'], $data['active'], $data['age'], $data['id']);
-        $result['success'] = "Пользователь успешно обновлён";
+        $result = "Пользователь успешно обновлён";
         return $result;
     }
 }
