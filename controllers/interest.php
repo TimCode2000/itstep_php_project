@@ -12,10 +12,12 @@ class InterestController
         if (isset($data['description'])) 
         {
             InterestDao::getInstance()->addInterest($data['description']);
-            $result['success'] = "Интерес добавлен успешно";
+            $interest = InterestDao::getInstance()->getInterestByDescription($data['description']);
+            PersonInterestdao::getInstance()->addInterestToPerson($data['personId'], $interest->id);
+            $result = "Success";
         } else
         {
-            $result['error'] = "Введите данные для добавления интереса";
+            $result = "Error";
         }
 
         return $result;

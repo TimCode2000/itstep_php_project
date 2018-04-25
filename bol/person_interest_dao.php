@@ -98,7 +98,7 @@ class PersonInterestDao extends BaseDao
 
     public function getInterestsOfPerson($personid)
     {
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE personid=$personId";
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE personid=$personid";
 
         return $this->queryForObjectList($query, $this->getDtoClassName());
     }

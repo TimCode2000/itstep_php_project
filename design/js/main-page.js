@@ -9,7 +9,7 @@ function loadMainData() {
                 $('#persons').empty();
 
                 $.each(data, function (key, value) {
-                    var row = "<tr id='" + value['id'] + "'><td>" + value['id'] + "</td><td>" + (value['firstName'] + " " + value['lastName']) + "</td><td>" + value['phone'] + "</td><td>" + value['age'] + "</td><td><a href='#' onclick='deleteUser(" + value['id'] + ")'>Delete</a> | <a href='#'>Edit</a></td></tr>";
+                    var row = "<tr id='" + value['id'] + "'><td>" + value['id'] + "</td><td>" + (value['firstName'] + " " + value['lastName']) + "</td><td>" + value['phone'] + "</td><td>" + value['age'] + "</td><td><a href='#' onclick='deleteUser(" + value['id'] + ")'>Delete</a> | <a href='edituser.html?userid=" + value['id'] + "'>Edit</a></td></tr>";
                     $('#persons').append(row);
                 })
             } else {
@@ -51,8 +51,10 @@ function searchPerson() {
                 $('#persons').empty();
 
                 $.each(data, function (kew, value) {
-                    var row = "<tr id='" + value['id'] + "'><td>" + value['id'] + "</td><td>" + (value['firstName'] + " " + value['lastName']) + "</td><td>" + value['phone'] + "</td><td>" + value['age'] + "</td><td><a href='person/delete?id=" + value['id'] + "'>Delete</a> | <a href='#'>Edit</a></td></tr>";
-                    $('#persons').append(row);
+                    if (value['id'] !== null) {
+                        var row = "<tr id='" + value['id'] + "'><td>" + value['id'] + "</td><td>" + (value['firstName'] + " " + value['lastName']) + "</td><td>" + value['phone'] + "</td><td>" + value['age'] + "</td><td><a href='#' onclick='deleteUser(" + value['id'] + ")'>Delete</a> | <a href='edituser.html?userid=" + value['id'] + "'>Edit</a></td></tr>";
+                        $('#persons').append(row);
+                    }
                 });
 
                 $('#approach').val("fullName");
@@ -70,7 +72,7 @@ function deleteUser(id) {
         dataType: "json",
         success: function (data) {
             if (data !== "Error") {
-                $('#persons tr:nth-child(' + id + ')').remove();
+                loadMainData();
             }
         }
     })

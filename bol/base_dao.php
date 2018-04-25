@@ -69,9 +69,11 @@ abstract class BaseDao
         $row = $sqliteResult->fetchArray(SQLITE3_ASSOC);
         $entity = new $dtoClassName();
         
-        foreach ($row as $column => $value)
-        {
-            $entity->$column = $value;
+        if (is_array($row)) {
+            foreach ($row as $column => $value)
+            {
+                $entity->$column = $value;
+            }
         }
 
         return $entity;
@@ -100,7 +102,7 @@ abstract class BaseDao
         $columnList = substr($columnList, 0, strlen($columnList) - 2);
         $valueList = substr($valueList, 0, strlen($valueList) - 2);
 
-        $query = "INSERT INTO " . strtolower(get_class($entity)) . "(" . $columnList . ") VALUES (" . $valueList . ");";
+        $query = "INSERT INTO " . $this->getTableName() . "(" . $columnList . ") VALUES (" . $valueList . ");";
 
         $newRowInserted = $this->sqlite_connection->exec($query);
 

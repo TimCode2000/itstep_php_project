@@ -51,10 +51,12 @@ class PersonController {
             $result = PersonDao::getInstance()->getPersonsByInterestDescription($data['interest']);
         } else if (isset($data['fullName']))
         {
-            $result = PersonDao::getInstance()->getPersonByFullName($data['fullName']);
+            $result = PersonDao::getInstance()->getPersonsByFullName($data['fullName']);
         } else if (isset($data['phone']))
         {
-            $result = PersonDao::getInstance()->getPersonByPhone($data['phone']);
+            $result = PersonDao::getInstance()->getPersonsByPhone($data['phone']);
+        } else if (isset($data['id'])) {
+            $result[] = PersonDao::getInstance()->getPersonById($data['id']);
         } else
         {
             $result = "Login";
@@ -69,7 +71,23 @@ class PersonController {
         $result = [];
 
         PersonDao::getInstance()->updatePerson($data['firstName'], $data['lastName'], $data['phone'], $data['active'], $data['age'], $data['id']);
-        $result = "Пользователь успешно обновлён";
+        $result = "Success";
+        return $result;
+    }
+
+    public function addInterest() {
+        $data = $_GET;
+        $reuslt = [];
+
+        if (isset($data['description'])) {
+            InterestDao::getInstance()->addInterest($data['description']);
+            $interest = InterestDao::getInstance()->getInterestByDescription($data['description'])[0];
+            PersonInterestDao::getInstance()->addInterestToPerson($data['personId'], $interest->id);
+            $result = "Success";
+        } else {
+            $result = "Error";
+        }
+
         return $result;
     }
 }

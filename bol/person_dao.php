@@ -182,12 +182,12 @@ class PersonDao extends BaseDao
      * @return Person
      */
 
-    public function getPersonByFullName($fullName)
+    public function getPersonsByFullName($fullName)
     {
         list($firstName, $lastName) = explode(" ", $fullName);
         $query = "SELECT * FROM " . $this->getTableName() . " WHERE firstName='$firstName' AND lastName='$lastName'";
 
-        return $this->queryForObject($query, $this->getDtoClassName());
+        return $this->queryForObjectList($query, $this->getDtoClassName());
     }
 
     /**
@@ -198,11 +198,11 @@ class PersonDao extends BaseDao
      * @return Person
      */
 
-    public function getPersonByPhone($phone)
+    public function getPersonsByPhone($phone)
     {
         $query = "SELECT * FROM " . $this->getTableName() . " WHERE phone='$phone'";
 
-        return $this->queryForObject($query, $this->getDtoClassName());
+        return $this->queryForObjectList($query, $this->getDtoClassName());
     }
 
     /**
@@ -215,13 +215,16 @@ class PersonDao extends BaseDao
 
     public function getPersonsByInterestDescription($description)
     {
-        $interest = InterestDao::getInstance()->getInterestByDescription($description);
-        $personInterests = PersonInterestDao::getInstance()->getPersonsWithInterest($interest->id);
+        $interests = InterestDao::getInstance()->getInterestByDescription($description);
         $result = [];
 
-        foreach ($personInterests as $personInterest)
-        {
-            $result[] = $this->getPersonByid($personInterest->personId);
+        foreach ($interests as $interest) {
+            $personInterests = PersonInterestDao::getInstance()->getPersonsWithInterest($interest->id);
+
+            foreach ($personInterests as $personInterest)
+            {
+                $result[] = $this->getPersonByid($personInterest->personId);
+            }
         }
 
         return $result;

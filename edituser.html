@@ -7,39 +7,109 @@
   <link rel="stylesheet" href="vendor/purecss/pure.css">
   <script type="text/javascript" src="vendor/vuejs/vue.js"></script>
   <link rel="stylesheet" href="assets/css/editUser.css">
+  <script src='design/js/jquery.js'></script>
 </head>
 
 <body>
+  <input type='text' id='personId' hidden>
+
+  <script>
+    $(function () {
+      $.ajax({
+        url: "person/search",
+        type: "GET",
+        data: "id=" + new URL(window.location.href).searchParams.get("userid"),
+        dataType: "json",
+        success: function (data) {
+          $.each(data, function (key, value) {
+            $('#first-name').val(value['firstName']);
+            $('#last-name').val(value['lastName']);
+            $('#age').val(value['age']);
+            $('#phone').val(value['phone']);
+            $('#active').val(value['active']);
+            $('#personId').val(value['id']);
+
+            $.ajax({
+              url: "personInterest/get",
+              type: "GET",
+              data: "personId=" + value['id'],
+              dataType: "json",
+              success: function (data) {
+                if (data != "Error") {
+                  $.each(data, function (key, value) {
+                    $('#interest-list').append("<li><span id='" + value['id'] + "' class='num'>X</span><span>" + value['description'] + "</span></li>")
+                  })
+                }
+              }
+            })
+          });
+        }
+      })
+
+      $('#addButton').on('click', function (e) {
+        $.ajax({
+          url: "person/addInterest",
+          type: "GET",
+          data: "description=" + $('textarea').val() + "&personId=" + $('#personId').val(),
+          dataType: "json",
+          success: function (data) {
+            if (data === "Success") {
+              $('#interest-list').empty();
+
+              $.ajax({
+                url: "personInterest/get",
+                type: "GET",
+                data: "personId=" + $('#personId').val(),
+                dataType: "json",
+                success: function (data) {
+                  if (data != "Error") {
+                    $.each(data, function (key, value) {
+                      $('#interest-list').append("<li><span id='" + value['id'] + "' class='num'>X</span><span>" + value['description'] + "</span></li>")
+                    })
+                  }
+                }
+              })
+            }
+          }
+        })
+      })
+
+      $('#editUserBtn').on('click', function (e) {
+        $.ajax({
+          url: "person/edit",
+          type: "GET",
+          data: "firstName=" + $('#first-name').val() + "&lastName=" + $("#last-name").val() + "&phone=" + $('#phone').val() + "&active=" + $('#active').val() + "&age=" + $('#age').val() + "&id=" + $('#personId').val(),
+          dataType: "json",
+          success: function (data) {
+            
+          }
+        })
+      });
+    })
+  </script>
+
   <div id="sc-edprofile">
     <h1>Edit Profile Form</h1>
     <div class="sc-container">
-      <input type="text" placeholder="First Name" />
-      <input type="text" placeholder="Last Name" />
-      <input type="number" placeholder="Age" />
-      <input type="text" placeholder="Mobile" />
+      <input type="text" id='first-name' placeholder="First Name" />
+      <input type="text" id='last-name' placeholder="Last Name" />
+      <input type="number" id='age' placeholder="Age" />
+      <input type="text" id='phone' placeholder="Mobile" />
 
       <textarea placeholder="Add interest" /></textarea>
       <button id="addButton">Add</button>
-      <select>
-      <option value="">Active</option>
-      <option value="">Non Active</option>
+      <select id='active'>
+      <option value="1">Active</option>
+      <option value="0">Non Active</option>
     </select>
       <h1>List of interests</h1>
-      <ol>
-        <li>
+      <ol id='interest-list'>
+        <!-- <li>
           <span id=1 class="num">X</span>
           <span>Tellus Cursus Magna Vestibulum</span>
-        </li>
-        <li>
-          <span id=1 class="num">X</span>
-          <span>Tellus Cursus Magna Vestibulum</span>
-        </li>
-        <li>
-          <span id=1 class="num">X</span>
-          <span>Tellus Cursus Magna Vestibulum</span>
-        </li>
+        </li> -->
       </ol>
-      <input type="submit" value="Save" />
+      <input type="submit" id='editUserBtn' value="Save" />
     </div>
   </div>
 
