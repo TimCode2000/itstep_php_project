@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,8 +10,8 @@
 </head>
 <body>
   <div class="form-container" style='color: black;'>
-    <form class="form">
-      <input class='input' type="text" id='uesrname' placeholder="Username" />
+    <form class="form" id='login-form'>
+      <input class='input' type="text" id='username' placeholder="Username" />
       <input class='input' type="password" id='password' placeholder="Password" />
       <input type="submit" value="Login" />
     </form>
@@ -21,21 +21,21 @@
   <script>
     $(function () {
       $('input[type="submit"]').on('click', function (e) {
-        e.preventDefault();
-
         $.ajax({
-          url: window.location.href + "/user/login",
+          url: "user/login",
           type: "POST",
-          data: "username=" + $('#username').val() + "&password=" + $('#password'),
+          data: "username=" + $('#username').val() + "&password=" + $('#password').val(),
           dataType: "json",
           success: function (data) {
               if (data === "Error") {
-                  $('form').append("<div id='error'></div>");
+                $('#login-form').prepend("<div id='error'>Incorrect data</div>");
               } else {
-                  window.location.href += "/main.html";
+                  window.location.href += "main.html";
               }
-          }
+          },
         });
+
+        e.preventDefault();
       })
     })
   </script>

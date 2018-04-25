@@ -15,25 +15,19 @@ class UserController
             {
                 $user = UserDao::getInstance()->getUserByUsername($data['username']);
 
-                if ($user)
+                if ($data['password'] == $user->password)
                 {
-                    if ($data['password'] == $user->password)
-                    {
-                        $sessionsDao = SessionDao::getInstance();
+                    $sessionsDao = SessionDao::getInstance();
 
-                        $timestamp = time();
-                        $sessions_count = $sessionsDao->getSessionsCount();
-                        $session_id = hash("ripemd128", ($sessions_count + 1) . $timestamp);
-                        $user_id = $sessions_count + 1;
-                        $user_ip = $_SERVER['REMOTE_ADDR'];
-                        $sessionsDao->addSession($session_id, $user_id, $user_ip);
-                        setcookie("current_session_id", $session_id, time() + 60 * 60 * 24 * 31, "/");
+                    $timestamp = time();
+                    $sessions_count = $sessionsDao->getSessionsCount();
+                    $session_id = hash("ripemd128", ($sessions_count + 1) . $timestamp);
+                    $user_id = $sessions_count + 1;
+                    $user_ip = $_SERVER['REMOTE_ADDR'];
+                    $sessionsDao->addSession($session_id, $user_id, $user_ip);
+                    setcookie("current_session_id", $session_id, time() + 60 * 60 * 24 * 31, "/");
 
-                        $result = "Success";
-                    } else
-                    {
-                        $result = "Error";
-                    }
+                    $result = "Success";
                 } else
                 {
                     $result = "Error";
@@ -47,7 +41,7 @@ class UserController
             $result = "Allready";
         }
 
-        return json_encode($result, JSON_UNESCAPED_UNICODE);
+        return $result;
     }
 
     public function logout()

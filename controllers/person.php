@@ -51,7 +51,6 @@ class PersonController {
             $result = PersonDao::getInstance()->getPersonsByInterestDescription($data['interest']);
         } else if (isset($data['fullName']))
         {
-            echo "<script>console.log('here')</script>";
             $result = PersonDao::getInstance()->getPersonByFullName($data['fullName']);
         } else if (isset($data['phone']))
         {
