@@ -34,11 +34,11 @@ class UserController
                 }
             } else
             {
-                $result = "Error";
+                $result = "Location: http://localhost/phpProject/itstep_php_project/login.html";
             }
         } else 
         {
-            $result = "Allready";
+            header("Location: http://localhost/phpProject/itstep_php_project/main.html");
         }
 
         return $result;
@@ -55,13 +55,9 @@ class UserController
             $sessionsDao -> removeSessionById($session_id);
 
             setcookie('current_session_id', $session_id, time() - 60 * 60 * 24 * 31, "/");
-            $result['logout'] = "Вы вышли из учётной записи";
-        } 
-        else
-        {
-            $result = "Вы не вошли в учётную запись";
+            
         }
-
-        return $result;
+        
+        header("Location: http://localhost/phpProject/itstep_php_project/login.html");
     }
 }

@@ -77,7 +77,7 @@ class PersonController {
 
     public function addInterest() {
         $data = $_GET;
-        $reuslt = [];
+        $result = [];
 
         if (isset($data['description'])) {
             InterestDao::getInstance()->addInterest($data['description']);
@@ -89,5 +89,10 @@ class PersonController {
         }
 
         return $result;
+    }
+
+    public function getPageCount() {
+        $persons = PersonDao::getInstance()->getPersons();
+        return floor(count($persons) / 20);
     }
 }

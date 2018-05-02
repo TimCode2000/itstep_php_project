@@ -30,7 +30,8 @@
               if (data === "Error") {
                 $('#login-form').prepend("<div id='error'>Incorrect data</div>");
               } else {
-                  window.location.href += "main.html";
+                  window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + "main.html";
+                  console.log(window.location.href);
               }
           },
         });

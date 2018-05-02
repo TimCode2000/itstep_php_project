@@ -162,6 +162,17 @@ class PersonDao extends BaseDao
     }
 
     /**
+     * Get persons
+     */
+
+    public function getPersons() 
+    {
+        $query = "SELECT * FROM " . $this->getTableName();
+
+        return $this->queryForObjectList($query, $this->getDtoClassName());
+    }
+
+    /**
      * Get person by id
      * 
      * @var integer

@@ -1,5 +1,5 @@
 AddDefaultCharset utf-8
-DirectoryIndex login.html
+DirectoryIndex login.php
 RewriteEngine ON
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
