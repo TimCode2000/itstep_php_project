@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . "/../bol/person_dao.php";
+require_once __DIR__ . "/../bol/person_interest_dao.php";
 
 class PersonController {
     public function add() {
@@ -26,12 +27,16 @@ class PersonController {
 
         if (isset($data['id']))
         {
+            $person = PersonDao::getInstance()->getPersonById($data['id']);
             PersonDao::getInstance()->removePersonById($data['id']);
+            PersonInterestDao::getInstance()->removePersonsInterests($person->id);
             $result = "Пользователь удалён успешно";
         }
         else if (isset($data['firstName']) && isset($data['lastName']))
         {
+            $person = PersonDao::getInstance()->getPersonsByFullName($data['firstName'] + " " + $data['lastName']);
             PersonDao::getInstance()->removePersonByFullName($data['firstName'] + " " + $data['lastName']);
+            PersonInterestDao::getInstance()->removePersonsInterests($person->id);
             $result = "Пользователь удалён успешно";
         }
         else
@@ -59,7 +64,7 @@ class PersonController {
             $result[] = PersonDao::getInstance()->getPersonById($data['id']);
         } else
         {
-            $result = "Login";
+            $result = "http://localhost/mainPhpProject/login.html";
         }
 
         return $result;

@@ -2,7 +2,7 @@ function loadMainData(pg) {
     $.ajax({
         url: "main.php",
         type: "GET",
-        data: "page=" + pg,
+        data: "page=" + pg + "&searchParam=" + $('#approach').val() + "&searchValue=" + $('#searchBar').val(),
         dataType: "json",
         success: function (data) {
             if (data !== "Login") {
@@ -19,32 +19,6 @@ function loadMainData(pg) {
                         loadMainData(page);
                     }
                 });
-            } else {
-                window.location.href = window.location.href.substring(0, window.location.href.indexOf('/main.html') + 1);
-            }
-        }
-    })
-}
-
-function searchPerson() {
-    $.ajax({
-        url: "person/search",
-        type: "GET",
-        data: $('#approach').val() + "=" + $('#searchBar').val(),
-        dataType: "json",
-        success: function (data) {
-            if (data !== "Login") {
-                $('#persons').empty();
-
-                $.each(data, function (kew, value) {
-                    if (value['id'] !== null) {
-                        var row = "<tr id='" + value['id'] + "'><td>" + value['id'] + "</td><td>" + (value['firstName'] + " " + value['lastName']) + "</td><td>" + value['phone'] + "</td><td>" + value['age'] + "</td><td><a href='#' onclick='deleteUser(" + value['id'] + ")'>Delete</a> | <a href='edituser.html?userid=" + value['id'] + "'>Edit</a></td></tr>";
-                        $('#persons').append(row);
-                    }
-                });
-
-                $('#approach').val("fullName");
-                $('#searchBar').val("");
             }
         }
     })

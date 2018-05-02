@@ -91,6 +91,18 @@ class PersonInterestDao extends BaseDao
     }
 
     /**
+     * Remove person and all interests
+     * 
+     * @param integer
+     */
+
+    public function removePersonsInterests($personId) {
+        $query = "personid=$personId";
+
+        $this->queryForRemove($query);
+    }
+
+    /**
      * Get interests list of specified person
      * 
      * @param integer
