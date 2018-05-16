@@ -159,6 +159,7 @@ class PersonDao extends BaseDao
         $query = "UPDATE " . $this->getTableName() . " SET " . $setStatement . " WHERE id=" . $personId;
 
         $this->executeUpdate($query);
+        return $newPerson;
     }
 
     /**
@@ -195,8 +196,7 @@ class PersonDao extends BaseDao
 
     public function getPersonsByFullName($fullName)
     {
-        list($firstName, $lastName) = explode(" ", $fullName);
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE firstName='$firstName' AND lastName='$lastName'";
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE firstName || ' ' || lastName LIKE '%$fullName%'";
 
         return $this->queryForObjectList($query, $this->getDtoClassName());
     }
@@ -211,7 +211,7 @@ class PersonDao extends BaseDao
 
     public function getPersonsByPhone($phone)
     {
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE phone='$phone'";
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE phone LIKE '%$phone%'";
 
         return $this->queryForObjectList($query, $this->getDtoClassName());
     }

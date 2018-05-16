@@ -13,6 +13,11 @@
   <script src='design/js/main-page.js'></script>
   
   <style>
+    body {
+      margin-top: 0px;
+      overflow: hidden;
+    }
+
     table {
       background-color: #fff;
     }
@@ -26,6 +31,51 @@
       justify-content: center;
       margin-top: 20px;
       margin-bottom: 20px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      flex-direction: row-reverse;
+      margin-bottom: 40px;
+      height: 75px;
+      background-color: buttonface;
+    }
+
+    .logout {
+      background-color: #3399cc;
+      color: white;
+      padding: 10px 20px;
+      border: 0px;
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 20px;
+      height: 60%;
+    }
+
+    .header a {
+      text-decoration: none;
+      color: white;
+    }
+
+    .header a:hover { 
+      color: white;
+      text-decoration: none;
+    }
+
+    .image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      background-color: #ccc;
+      height: 45px;
+      width: 45px;
+      border-radius: 50%;
+    }
+
+    #username {
+      margin-right: 20px;
     }
   </style>
 </head>
@@ -46,6 +96,12 @@
     })
   </script>
 
+  <div class="header">
+    <a href="http://localhost/mainPhpProject/itstep_php_project/user/logout"><button class="logout">Logout</button></a>
+    <div class='image'><img src="design/img/account.png" width="30px"></div>
+    <span id='username'></span>
+  </div>
+
   <div class="page-wrap">
     <form class="pure-form">
        <fieldset>
@@ -55,7 +111,7 @@
           <option value="phone">Phone</option>
           <option value="interest">Interests</option>
         </select>
-        <button type="button" onclick="loadMainData(1)">Search</button>
+        <button type="button">Search</button>
       </fieldset>
        <div id="UserList">
         <table class="pure-table">
@@ -86,6 +142,19 @@
           loadMainData(page);
         }
       });
+
+      $('#searchBar').on('input', function () {
+        loadMainData($('#pagination').attr("data-current"));
+      });
+
+      $.ajax({
+        url: "user/getName",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          $('#username').text(data);
+        }
+      })
     })
   </script>
 </body>

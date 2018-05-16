@@ -26,6 +26,7 @@ class UserController
                     $user_ip = $_SERVER['REMOTE_ADDR'];
                     $sessionsDao->addSession($session_id, $user_id, $user_ip);
                     setcookie("current_session_id", $session_id, time() + 60 * 60 * 24 * 31, "/");
+                    setcookie("current_username", $data['username'], time() + 60 * 60 * 24 * 31, "/");
 
                     $result = "Success";
                 } else
@@ -34,11 +35,11 @@ class UserController
                 }
             } else
             {
-                $result = "Location: http://localhost/phpProject/itstep_php_project/login.html";
+                $result = "Location: http://localhost/mainPhpProject/itstep_php_project/login.html";
             }
         } else 
         {
-            header("Location: http://localhost/phpProject/itstep_php_project/main.html");
+            header("Location: http://localhost/mainPhpProject/itstep_php_project/main.html");
         }
 
         return $result;
@@ -58,6 +59,17 @@ class UserController
             
         }
         
-        header("Location: http://localhost/phpProject/itstep_php_project/login.html");
+        header("Location: http://localhost/mainPhpProject/itstep_php_project/login.html");
+    }
+
+    public function getName() {
+        $result = "";
+
+        if (isset($_COOKIE['current_username'])) 
+        {
+            $result = $_COOKIE['current_username'];
+        }
+
+        return $result;
     }
 }

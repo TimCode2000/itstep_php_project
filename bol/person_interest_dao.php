@@ -85,7 +85,7 @@ class PersonInterestDao extends BaseDao
 
     public function removeInterestFromPerson($personId, $interestId)
     {
-        $query = "personId=$personid AND interestId=$interestId";
+        $query = "personId=$personId AND interestId=$interestId";
 
         $this->queryForRemove($query);
     }

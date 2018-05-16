@@ -21,6 +21,7 @@
   <script>
     $(function () {
       $('input[type="submit"]').on('click', function (e) {
+        $('#error').remove();
         $.ajax({
           url: "user/login",
           type: "POST",

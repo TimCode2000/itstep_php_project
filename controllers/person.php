@@ -75,9 +75,12 @@ class PersonController {
         $data = $_GET;
         $result = [];
 
-        PersonDao::getInstance()->updatePerson($data['firstName'], $data['lastName'], $data['phone'], $data['active'], $data['age'], $data['id']);
-        $result = "Success";
-        return $result;
+        if (isset($data['firstName']) && isset($data['lastName']) && isset($data['phone']) && isset($data['active']) && isset($data['age']) && isset($data['id'])) {
+             PersonDao::getInstance()->updatePerson($data['firstName'], $data['lastName'], $data['phone'], $data['active'], $data['age'], $data['id']);
+             header("Location: http://localhost/mainPhpProject/itstep_php_project/main.php");
+        } else {
+            return "Error";
+        }
     }
 
     public function addInterest() {

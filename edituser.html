@@ -8,12 +8,52 @@
   <script type="text/javascript" src="vendor/vuejs/vue.js"></script>
   <link rel="stylesheet" href="assets/css/editUser.css">
   <script src='design/js/jquery.js'></script>
+
+  <style>
+    #addButton {
+      height: 51.439px;
+      margin: 0px;
+      width: 20%;
+    }
+
+    #addInterestField {
+      width: 70%;
+    }
+
+    li span {
+      margin-left: 10px;
+      transition: .5s;
+    }
+
+    li span:hover {
+      cursor: pointer;
+      color: #3399cc;
+      background-color: #ddd;
+    }
+  </style>
 </head>
 
 <body>
   <input type='text' id='personId' hidden>
 
   <script>
+    function deleteInterest(id) {
+      var $interestId = id;
+      var $fullName = $('#first-name').val() + " " + $('#last-name').val();
+
+      $.ajax({
+        url: "personInterest/deleteInterestFromUesr",
+        type: "GET",
+        data: "personId=" + $('#personId').val() + "&interestId=" + $interestId,
+        dataType: "json",
+        success: function (data) {
+          if (data === "Success") {
+            $('span#' + $interestId).parent().remove();
+          }
+        }
+      })
+    }
+
     $(function () {
       $.ajax({
         url: "person/search",
@@ -37,7 +77,7 @@
               success: function (data) {
                 if (data != "Error") {
                   $.each(data, function (key, value) {
-                    $('#interest-list').append("<li><span id='" + value['id'] + "' class='num'>X</span><span>" + value['description'] + "</span></li>")
+                    $('#interest-list').append("<li><span id='" + value['id'] + "' class='num' onclick='deleteInterest(" + value['id'] + ")'>X</span><span>" + value['description'] + "</span></li>");
                   })
                 }
               }
@@ -50,10 +90,11 @@
         $.ajax({
           url: "person/addInterest",
           type: "GET",
-          data: "description=" + $('textarea').val() + "&personId=" + $('#personId').val(),
+          data: "description=" + $('#addInterestField').val() + "&personId=" + $('#personId').val(),
           dataType: "json",
           success: function (data) {
             if (data === "Success") {
+              $('#addInterestField').val("");
               $('#interest-list').empty();
 
               $.ajax({
@@ -64,7 +105,8 @@
                 success: function (data) {
                   if (data != "Error") {
                     $.each(data, function (key, value) {
-                      $('#interest-list').append("<li><span id='" + value['id'] + "' class='num'>X</span><span>" + value['description'] + "</span></li>")
+                      console.log(value);
+                      $('#interest-list').append("<li><span id='" + value['id'] + "' class='num' onclick='deleteInterest(" + value['id'] + ")'>X</span><span>" + value['description'] + "</span></li>");
                     })
                   }
                 }
@@ -80,8 +122,7 @@
           type: "GET",
           data: "firstName=" + $('#first-name').val() + "&lastName=" + $("#last-name").val() + "&phone=" + $('#phone').val() + "&active=" + $('#active').val() + "&age=" + $('#age').val() + "&id=" + $('#personId').val(),
           dataType: "json",
-          success: function (data) {
-            
+          success: function (value) {
           }
         })
       });
@@ -96,7 +137,7 @@
       <input type="number" id='age' placeholder="Age" />
       <input type="text" id='phone' placeholder="Mobile" />
 
-      <textarea placeholder="Add interest" /></textarea>
+      <input type='text' id='addInterestField' placeholder="Add interest" style="width: 70%"/></input>
       <button id="addButton">Add</button>
       <select id='active'>
       <option value="1">Active</option>
@@ -104,10 +145,6 @@
     </select>
       <h1>List of interests</h1>
       <ol id='interest-list'>
-        <!-- <li>
-          <span id=1 class="num">X</span>
-          <span>Tellus Cursus Magna Vestibulum</span>
-        </li> -->
       </ol>
       <input type="submit" id='editUserBtn' value="Save" />
     </div>

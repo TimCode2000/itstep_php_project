@@ -27,7 +27,7 @@ if (!isset($_COOKIE['current_session_id'])) {
         }
     } else
     {
-        $result = "Location: http://localhost/mainPhpProject/itstep_php_project/login.html";
+        header("Location: http://localhost/mainPhpProject/itstep_php_project/login.html");
     }
 } else 
 {

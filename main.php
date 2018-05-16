@@ -37,7 +37,7 @@
             } else if ($data['searchParam'] === "fullName")
             {
                 $result = PersonDao::getInstance()->getPersonsByFullName($data['searchValue']);
-            } else if ($data['searchParam'] === "interest")
+            } else if ($data['searchParam'] === "phone")
             {
                 $result = PersonDao::getInstance()->getPersonsByPhone($data['searchValue']);
             }
