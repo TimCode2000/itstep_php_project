@@ -139,15 +139,27 @@ class InterestDao extends BaseDao
     }
 
     /**
+     * Get interest like description
+     * 
+     * @param string
+     */
+
+    public function getInterestLikeDescription($description)
+    {
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE description LIKE '%$description%'";
+
+        return $this->queryForObjectList($query, $this->getDtoClassName());
+    }
+
+    /**
      * Get interest by description
      * 
      * @param string
      */
 
-    public function getInterestByDescription($description)
-    {
-        $query = "SELECT * FROM " . $this->getTableName() . " WHERE description LIKE '%$description%'";
+    public function getInterestByDescription($description) {
+        $query = "SELECT * FROM " . $this->getTableName() . " WHERE description='$description'";
 
-        return $this->queryForObjectList($query, $this->getDtoClassName());
+        return $this->queryForObject($query, $this->getDtoClassName());
     }
 }

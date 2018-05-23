@@ -116,6 +116,13 @@
         })
       })
 
+      $('#age').on('input', function () {
+        console.log("here alah");
+        if (parseInt($('#age').val()) < 1) {
+          $('#age').val(1);
+        }
+      })
+
       $('#editUserBtn').on('click', function (e) {
         $.ajax({
           url: "person/edit",
@@ -123,6 +130,9 @@
           data: "firstName=" + $('#first-name').val() + "&lastName=" + $("#last-name").val() + "&phone=" + $('#phone').val() + "&active=" + $('#active').val() + "&age=" + $('#age').val() + "&id=" + $('#personId').val(),
           dataType: "json",
           success: function (value) {
+            if (value === "Success") {
+              window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
+            }
           }
         })
       });
@@ -134,7 +144,7 @@
     <div class="sc-container">
       <input type="text" id='first-name' placeholder="First Name" />
       <input type="text" id='last-name' placeholder="Last Name" />
-      <input type="number" id='age' placeholder="Age" />
+      <input type="number" id='age' placeholder="Age" min='1' max='200' />
       <input type="text" id='phone' placeholder="Mobile" />
 
       <input type='text' id='addInterestField' placeholder="Add interest" style="width: 70%"/></input>

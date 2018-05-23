@@ -54,7 +54,7 @@ class InterestController
             $result = InterestDao::getInstance()->getInterestById($data['id']);
         } else if (isset($data['description']))
         {
-            $result = InterestDao::getInstance()->getInterestByDescription($data['description']);
+            $result = InterestDao::getInstance()->getInterestLikeDescription($data['description']);
         } else
         {
             $result['error'] = "Введите данные для поиска интереса";

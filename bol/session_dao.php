@@ -84,7 +84,6 @@ class SessionDao extends BaseDao
      * 
      * @param string
      */
-
     public function removeSessionById($id)
     {
         $query = "id='$id'";

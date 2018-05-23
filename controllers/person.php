@@ -76,8 +76,8 @@ class PersonController {
         $result = [];
 
         if (isset($data['firstName']) && isset($data['lastName']) && isset($data['phone']) && isset($data['active']) && isset($data['age']) && isset($data['id'])) {
-             PersonDao::getInstance()->updatePerson($data['firstName'], $data['lastName'], $data['phone'], $data['active'], $data['age'], $data['id']);
-             header("Location: http://localhost/mainPhpProject/itstep_php_project/main.php");
+            PersonDao::getInstance()->updatePerson($data['firstName'], $data['lastName'], $data['phone'], $data['active'], $data['age'], $data['id']);
+            return "Success";
         } else {
             return "Error";
         }
@@ -88,8 +88,13 @@ class PersonController {
         $result = [];
 
         if (isset($data['description'])) {
-            InterestDao::getInstance()->addInterest($data['description']);
-            $interest = InterestDao::getInstance()->getInterestByDescription($data['description'])[0];
+            $interestDao = InterestDao::getInstance();
+
+            if ($interestDao->getInterestByDescription($data['description'])->id === null) {
+                $interestDao->addInterest($data['description']);
+            }
+            
+            $interest = $interestDao->getInterestByDescription($data['description']);
             PersonInterestDao::getInstance()->addInterestToPerson($data['personId'], $interest->id);
             $result = "Success";
         } else {
